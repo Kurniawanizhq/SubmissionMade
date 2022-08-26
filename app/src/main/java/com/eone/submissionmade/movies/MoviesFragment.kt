@@ -59,7 +59,7 @@ class MoviesFragment : Fragment(), Callback {
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return true
+                    return false
                 }
 
             }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -178,8 +178,11 @@ class MoviesFragment : Fragment(), Callback {
         }
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
+        searchView.setOnQueryTextListener(null)
+        searchView.setOnSearchViewListener(null)
         binding.rvMovie.adapter = null
         _fragmentMoviesBinding = null
     }

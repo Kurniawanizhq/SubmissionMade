@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eone.core.domain.model.Content
@@ -16,14 +17,14 @@ import com.eone.core.ui.ContentAdapter
 import com.eone.core.utils.Callback
 import com.eone.core.utils.SortUtils
 import com.eone.favorite.FavoriteViewModel
-import com.eone.favorite.R
 import com.eone.favorite.ViewModelFactory
 import com.eone.favorite.databinding.FragmentFavoriteTvShowBinding
 import com.eone.favorite.di.DaggerFavoriteComponent
 import com.eone.favorite.utils.OnItemSwiped
 import com.eone.favorite.utils.SwipeHelperCallback
 import com.eone.submissionmade.detail.DetailActivity
-import com.eone.submissionmade.di.FavoriteModulDependencies
+import com.eone.submissionmade.di.FavoriteModuleDependencies
+import com.eone.submissionmade.utils.DataState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
@@ -32,7 +33,8 @@ class FavoriteTvShowFragment : Fragment(), Callback {
 
     private var _binding: FragmentFavoriteTvShowBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private lateinit var adapter : ContentAdapter
+    private var sort = SortUtils.RANDOM
+    private lateinit var contentAdapter : ContentAdapter
 
     @Inject
     lateinit var factory: ViewModelFactory
@@ -49,7 +51,7 @@ class FavoriteTvShowFragment : Fragment(), Callback {
             .appDependencies(
                 EntryPointAccessors.fromApplication(
                     context as Context,
-                    FavoriteModulDependencies::class.java
+                    FavoriteModuleDependencies::class.java
                 )
             )
             .build()
@@ -59,16 +61,58 @@ class FavoriteTvShowFragment : Fragment(), Callback {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        itemSwipeHelper.attachToRecyclerView(binding.rvFavoriteTvshow)
-        adapter = ContentAdapter(this)
-        getFavorite()
+        if (activity != null) {
+            itemSwipeHelper.attachToRecyclerView(binding.rvFavoriteTvshow)
+            setupRecyclerView()
+            setList(sort)
+        }
+    }
+
+
+    private fun setList(sort : String){
+        viewModel.getFavoriteTvShows(sort).observe(viewLifecycleOwner, observer)
+    }
+
+    private val observer = Observer<List<Content>> { content ->
+        if (content.isNullOrEmpty()) {
+            setDataState(DataState.ERROR)
+        } else {
+            setDataState(DataState.SUCCESS)
+        }
+        contentAdapter.setContent(content)
+    }
+
+    private fun setDataState(state: DataState) {
+        binding.apply {
+            when (state) {
+                DataState.ERROR -> {
+                    showEmptyFavorite(true)
+                }
+                DataState.LOADING -> {
+                    showEmptyFavorite(true)
+                }
+                DataState.SUCCESS -> {
+                    showEmptyFavorite(false)
+                }
+            }
+        }
+    }
+
+    private fun setupRecyclerView(){
+        contentAdapter = ContentAdapter(this)
+
+        with(binding.rvFavoriteTvshow){
+            layoutManager = GridLayoutManager(context, 2)
+            setHasFixedSize(true)
+            adapter = contentAdapter
+        }
     }
 
     private val itemSwipeHelper = SwipeHelperCallback(object : OnItemSwiped {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder) {
             if (view != null) {
                 val swipedPosition = viewHolder.adapterPosition
-                val itemPositionMovie = adapter.getSwipedData(swipedPosition)
+                val itemPositionMovie = contentAdapter.getSwipedData(swipedPosition)
                 var state = itemPositionMovie.favorite
                 viewModel.setFavorite(itemPositionMovie, !state)
                 state = !state
@@ -81,25 +125,6 @@ class FavoriteTvShowFragment : Fragment(), Callback {
         }
     })
 
-    private fun getFavorite() {
-        binding.apply {
-            rvFavoriteTvshow.layoutManager = GridLayoutManager(context, 2)
-            rvFavoriteTvshow.adapter = adapter
-            viewModel.getFavoriteTvShows(SortUtils.POPULARITY).observe(viewLifecycleOwner) {
-                if (!it.isNullOrEmpty()) {
-                    showEmptyFavorite(false)
-                    rvFavoriteTvshow.adapter.let { adapter ->
-                        if (adapter is ContentAdapter) {
-                            adapter.setContent(it)
-                        }
-                    }
-                } else {
-                    showEmptyFavorite(true)
-                }
-            }
-        }
-    }
-
     private fun showEmptyFavorite(state: Boolean) {
         binding.apply {
             rvFavoriteTvshow.isInvisible = state
@@ -111,6 +136,7 @@ class FavoriteTvShowFragment : Fragment(), Callback {
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.rvFavoriteTvshow.adapter = null
         _binding = null
     }
 

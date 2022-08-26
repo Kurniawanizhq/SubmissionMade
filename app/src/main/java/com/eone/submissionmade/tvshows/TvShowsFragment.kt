@@ -179,6 +179,8 @@ class TvShowsFragment : Fragment(), Callback {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        searchView.setOnQueryTextListener(null)
+        searchView.setOnSearchViewListener(null)
         binding.rvTvshow.adapter = null
         _binding = null
     }

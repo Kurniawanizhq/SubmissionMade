@@ -69,7 +69,7 @@ class DetailActivity : AppCompatActivity() {
     private fun showFavoriteToast(add: Boolean) {
         if (add) {
             FancyToast.makeText(
-                this@DetailActivity,
+                applicationContext,
                 getString(R.string.addToFavorite),
                 FancyToast.LENGTH_SHORT,
                 FancyToast.SUCCESS,
@@ -78,7 +78,7 @@ class DetailActivity : AppCompatActivity() {
             ).show()
         } else {
             FancyToast.makeText(
-                this@DetailActivity,
+                applicationContext,
                 getString(R.string.removeFromFavorite),
                 FancyToast.LENGTH_SHORT,
                 FancyToast.ERROR,
@@ -107,6 +107,7 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
+
 
     companion object {
         const val EXTRA_DETAIL = "EXTRA DETAIL"

@@ -35,6 +35,7 @@ class FavoriteFragment : Fragment() {
     }
     override fun onDestroy() {
         super.onDestroy()
+        binding.vpFavorite.adapter = null
         _favoriteFragmentBinding = null
     }
 

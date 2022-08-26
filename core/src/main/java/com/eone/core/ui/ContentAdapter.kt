@@ -2,6 +2,8 @@ package com.eone.core.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eone.core.BuildConfig
@@ -9,18 +11,25 @@ import com.eone.core.R
 import com.eone.core.databinding.ListContentBinding
 import com.eone.core.domain.model.Content
 import com.eone.core.utils.Callback
+import com.eone.core.utils.ContentDiffCallback
 
-class ContentAdapter (private val callback: Callback): RecyclerView.Adapter<ContentAdapter.MovieViewHolder>() {
+class ContentAdapter (private val callback: Callback) : RecyclerView.Adapter<ContentAdapter.MovieViewHolder>() {
+
     private var listContents = ArrayList<Content>()
 
     fun setContent(contents: List<Content>?) {
-        if (contents == null) return
-        listContents.clear()
-        listContents.addAll(contents)
-        notifyDataSetChanged()
+        if (contents != null) {
+            val diffCallback = ContentDiffCallback(listContents, contents)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            listContents.clear()
+            listContents.addAll(contents)
+            diffResult.dispatchUpdatesTo(this)
+        }
     }
 
-    fun getSwipedData(swipedPosition: Int): Content = listContents[swipedPosition]
+    fun getSwipedData(swipedPosition: Int): Content {
+        return listContents[swipedPosition]
+    }
 
 
     inner class MovieViewHolder(private val binding: ListContentBinding) :
@@ -56,4 +65,5 @@ class ContentAdapter (private val callback: Callback): RecyclerView.Adapter<Cont
     }
 
     override fun getItemCount(): Int = listContents.size
+
 }

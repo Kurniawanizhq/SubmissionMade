@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eone.core.domain.model.Content
@@ -21,8 +22,9 @@ import com.eone.favorite.ViewModelFactory
 import com.eone.favorite.databinding.FragmentFavoriteMovieBinding
 import com.eone.favorite.di.DaggerFavoriteComponent
 import com.eone.favorite.utils.SwipeHelperCallback
-import com.eone.submissionmade.di.FavoriteModulDependencies
 import com.eone.favorite.utils.OnItemSwiped
+import com.eone.submissionmade.di.FavoriteModuleDependencies
+import com.eone.submissionmade.utils.DataState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
@@ -31,7 +33,8 @@ class FavoriteMovieFragment : Fragment(), Callback {
 
     private var _binding: FragmentFavoriteMovieBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private lateinit var adapter: ContentAdapter
+    private var sort = SortUtils.RANDOM
+    private lateinit var contentAdapter: ContentAdapter
 
     @Inject
     lateinit var factory: ViewModelFactory
@@ -49,7 +52,7 @@ class FavoriteMovieFragment : Fragment(), Callback {
             .appDependencies(
                 EntryPointAccessors.fromApplication(
                     context as Context,
-                    FavoriteModulDependencies::class.java
+                    FavoriteModuleDependencies::class.java
                 )
             )
             .build()
@@ -60,16 +63,54 @@ class FavoriteMovieFragment : Fragment(), Callback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         itemSwipeHelper.attachToRecyclerView(binding.rvFavoriteMovie)
-        adapter = ContentAdapter(this)
-        getFavorite()
+        setupRecyclerView()
+        setList(sort)
     }
 
+    private fun setList(sort : String){
+        viewModel.getFavoriteMovies(sort).observe(viewLifecycleOwner, observer)
+    }
+
+    private val observer = Observer<List<Content>> { content ->
+        if (content.isNullOrEmpty()) {
+            setDataState(DataState.ERROR)
+        } else {
+            setDataState(DataState.SUCCESS)
+        }
+        contentAdapter.setContent(content)
+    }
+
+    private fun setDataState(state: DataState) {
+        binding.apply {
+            when (state) {
+                DataState.ERROR -> {
+                    showEmptyFavorite(true)
+                }
+                DataState.LOADING -> {
+                    showEmptyFavorite(true)
+                }
+                DataState.SUCCESS -> {
+                    showEmptyFavorite(false)
+                }
+            }
+        }
+    }
+
+    private fun setupRecyclerView(){
+        contentAdapter = ContentAdapter(this)
+
+        with(binding.rvFavoriteMovie){
+            layoutManager = GridLayoutManager(context, 2)
+            setHasFixedSize(true)
+            adapter = contentAdapter
+        }
+    }
 
     private val itemSwipeHelper = SwipeHelperCallback(object : OnItemSwiped {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder) {
             if (view != null) {
                 val swipedPosition = viewHolder.adapterPosition
-                val itemPositionMovie = adapter.getSwipedData(swipedPosition)
+                val itemPositionMovie = contentAdapter.getSwipedData(swipedPosition)
                 var state = itemPositionMovie.favorite
                 viewModel.setFavorite(itemPositionMovie, !state)
                 state = !state
@@ -87,25 +128,6 @@ class FavoriteMovieFragment : Fragment(), Callback {
         }
     })
 
-    private fun getFavorite() {
-        binding.apply {
-            rvFavoriteMovie.layoutManager = GridLayoutManager(context, 2)
-            rvFavoriteMovie.adapter = adapter
-            viewModel.getFavoriteMovies(SortUtils.POPULARITY).observe(viewLifecycleOwner) {
-                if (!it.isNullOrEmpty()) {
-                    showEmptyFavorite(false)
-                    rvFavoriteMovie.adapter.let { adapter ->
-                        if (adapter is ContentAdapter) {
-                            adapter.setContent(it)
-                        }
-                    }
-                } else {
-                    showEmptyFavorite(true)
-                }
-            }
-        }
-    }
-
     private fun showEmptyFavorite(state: Boolean) {
         binding.apply {
             rvFavoriteMovie.isInvisible = state
@@ -117,6 +139,7 @@ class FavoriteMovieFragment : Fragment(), Callback {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.rvFavoriteMovie.adapter = null
         _binding = null
     }
 

@@ -22,6 +22,8 @@ dependencies {
     implementation "com.victor:lib:$victor_version"
     implementation "io.github.shashank02051997:FancyToast:$fancyToast_version"
 
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_canary_version"
 
 }
