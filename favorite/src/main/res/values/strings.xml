@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="movies">Movies</string>
+    <string name="tvshows">Tv Shows</string>
+    <string name="no_favorites">NO FAVORITES</string>
+    <string name="no_favorite_item">No favorites yet</string>
+    <string name="no_favorite_item_movie">You don\'t have a list of favorite movies</string>
+    <string name="no_favorite_item_tvshow">You don\'t have a list of favorite tv shows</string>
+
+</resources>

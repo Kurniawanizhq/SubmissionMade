@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">SubmissionMade</string>
+    <string name="favorite">Favorite</string>
+    <string name="contents">Movies</string>
+    <string name="tvshows">Tv Shows</string>
+    <string name="title_favorite">favorite</string>
+    <string name="percent">%</string>
+    <string name="overview">Overview</string>
+    <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consectetur diam eget volutpat porta. Sed dictum id mi in facilisis. Suspendisse vehicula convallis efficitur. Nunc imperdiet velit ut est hendrerit, vel cursus libero pellentesque. Sed varius vel orci in finibus. Etiam eu enim justo. Duis tempor ipsum in sem aliquam, id vestibulum odio imperdiet. Curabitur condimentum sem lacus, nec mattis diam pharetra nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; In ac erat at lorem mattis varius. Etiam eu risus metus.</string>
+    <string name="popularity">Popularity</string>
+    <string name="card_detail_foreground">card_detail_foreground</string>
+    <string name="background_image">Background Image</string>
+    <string name="back_button">Back Button</string>
+    <string name="no_favorites">No Favorites</string>
+    <string name="addToFavorite">You added to Favorite</string>
+    <string name="removeFromFavorite">You deleted from Favorite</string>
+    <string name="search">Search</string>
+    <string name="no_data">NO DATA</string>
+    <string name="splash_iv">Splash iv</string>
+</resources>
