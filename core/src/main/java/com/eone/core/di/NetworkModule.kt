@@ -19,8 +19,9 @@ class NetworkModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         val hostName = "api.themoviedb.org"
+        val mySuperSecretKey = BuildConfig.HASH_PIN
         val certificatePinner = CertificatePinner.Builder()
-            .add(hostName, "sha256/JSMzqOOrtyOT1kmau6zKhgT676hGgczD5VMdRMyJZFA=")
+            .add(hostName,mySuperSecretKey )
             .build()
 
         return OkHttpClient.Builder()

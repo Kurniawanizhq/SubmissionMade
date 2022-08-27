@@ -1,7 +1,9 @@
 package com.eone.core.di
 
 import android.content.Context
+import androidx.core.content.ContextCompat
 import androidx.room.Room
+import com.eone.core.R
 import com.eone.core.data.source.local.room.ContentDao
 import com.eone.core.data.source.local.room.ContentDatabase
 import dagger.Module
@@ -12,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import javax.inject.Singleton
+import kotlin.coroutines.coroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -28,7 +31,7 @@ class DatabaseModule {
         return Room.databaseBuilder(
             context.applicationContext,
             ContentDatabase::class.java,
-            "Content.db"
+            context.getString(R.string.databaseName)
         ).fallbackToDestructiveMigration()
             .openHelperFactory(factory)
             .build()

@@ -2,4 +2,5 @@
 <resources>
     <string name="poster">POSTER</string>
     <string name="background_shadow">Background Shadow</string>
+    <string name="databaseName">Content.db</string>
 </resources>

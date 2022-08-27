@@ -8,17 +8,18 @@ import com.eone.core.domain.model.Content
 import com.eone.core.domain.repository.IContentRepository
 import com.eone.core.utils.DataMapper
 import com.eone.core.data.source.remote.network.ApiResponse
-import com.eone.core.utils.AppExecutors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ContentRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
+    private val localDataSource: LocalDataSource
 ) : IContentRepository {
 
     override fun getAllMovies(sort: String): Flow<Resource<List<Content>>> =
@@ -93,6 +94,8 @@ class ContentRepository @Inject constructor(
 
     override fun setMovieFavorite(content: Content, state: Boolean) {
         val movieEntity = DataMapper.mapDomainToEntity(content)
-        appExecutors.diskIO().execute { localDataSource.setMovieFavorite(movieEntity, state) }
+        CoroutineScope(Dispatchers.IO).launch {
+            localDataSource.setMovieFavorite(movieEntity, state)
+        }
     }
 }

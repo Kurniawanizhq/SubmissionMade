@@ -3,8 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1045" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable/ic_award.xml" value="0.1045" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable/ic_launcher_background.xml" value="0.142" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable/ic_logo_splash.xml" value="0.1045" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable/ic_sad.xml" value="0.1045" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable/ic_search.xml" value="0.1045" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/drawable/ic_star.xml" value="0.142" />
+        <entry key="..\:/Source Android/SubmissionMade/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/SubmissionMade/app/src/main/res/layout/fragment_movies.xml" value="0.25" />
         <entry key="..\:/SubmissionMade/app/src/main/res/layout/fragment_tv_shows.xml" value="0.2749094202898551" />
+        <entry key="..\:/Users/KDZ/Videos/Source Android/SubmissionMade/app/src/main/res/drawable/ic_award.xml" value="0.142" />
+        <entry key="..\:/Users/KDZ/Videos/Source Android/SubmissionMade/app/src/main/res/drawable/ic_date.xml" value="0.142" />
+        <entry key="..\:/Users/KDZ/Videos/Source Android/SubmissionMade/app/src/main/res/drawable/ic_star.xml" value="0.142" />
+        <entry key="..\:/Users/KDZ/Videos/Source Android/SubmissionMade/app/src/main/res/layout/fragment_movies.xml" value="0.41754385964912283" />
       </map>
     </option>
   </component>

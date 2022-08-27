@@ -67,7 +67,7 @@
             app:fab_colorNormal="@color/fabNormal"
             app:fab_colorPressed="@color/fabPressed"
             app:fab_colorRipple="@color/fabRipple"
-            app:fab_label="Popularity"
+            app:fab_label="Newest"
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -78,7 +78,7 @@
             app:fab_colorNormal="@color/fabNormal"
             app:fab_colorPressed="@color/fabPressed"
             app:fab_colorRipple="@color/fabRipple"
-            app:fab_label="Vote"
+            app:fab_label="Popularity"
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -89,7 +89,7 @@
             app:fab_colorNormal="@color/fabNormal"
             app:fab_colorPressed="@color/fabPressed"
             app:fab_colorRipple="@color/fabRipple"
-            app:fab_label="Newest"
+            app:fab_label="Vote"
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
