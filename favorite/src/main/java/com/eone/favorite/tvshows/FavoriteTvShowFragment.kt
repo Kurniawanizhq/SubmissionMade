@@ -134,8 +134,8 @@ class FavoriteTvShowFragment : Fragment(), Callback {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding.rvFavoriteTvshow.adapter = null
         _binding = null
     }

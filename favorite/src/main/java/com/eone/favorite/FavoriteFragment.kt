@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.eone.favorite.databinding.FragmentFavoriteBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -27,14 +26,15 @@ class FavoriteFragment : Fragment() {
 
     private fun setupView(){
         binding.apply {
-            vpFavorite.adapter = FavoritePagerAdapter(activity as AppCompatActivity)
+            vpFavorite.adapter = FavoritePagerAdapter(childFragmentManager,viewLifecycleOwner.lifecycle)
             TabLayoutMediator(tlFavorite, vpFavorite) { tab, position ->
                 tab.text = resources.getString(TAB_TITLES[position])
             }.attach()
         }
     }
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding.vpFavorite.adapter = null
         _favoriteFragmentBinding = null
     }

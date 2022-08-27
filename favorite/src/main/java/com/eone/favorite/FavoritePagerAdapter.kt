@@ -1,12 +1,14 @@
 package com.eone.favorite
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.eone.favorite.tvshows.FavoriteTvShowFragment
 import com.eone.favorite.movies.FavoriteMovieFragment
+import com.eone.favorite.tvshows.FavoriteTvShowFragment
 
-class FavoritePagerAdapter(activity : AppCompatActivity) : FragmentStateAdapter(activity) {
+
+class FavoritePagerAdapter(fm: FragmentManager,lifecycle: Lifecycle) : FragmentStateAdapter(fm,lifecycle) {
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
