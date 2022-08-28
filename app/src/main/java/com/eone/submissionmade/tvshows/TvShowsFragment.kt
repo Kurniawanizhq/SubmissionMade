@@ -3,6 +3,7 @@ package com.eone.submissionmade.tvshows
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuProvider
@@ -58,7 +59,7 @@ class TvShowsFragment : Fragment(), Callback {
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return true
+                    return false
                 }
 
             }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -116,6 +117,10 @@ class TvShowsFragment : Fragment(), Callback {
         }
     }
 
+    private fun setList(sort: String) {
+        viewModel.getTvShows(sort).observe(viewLifecycleOwner,observer)
+    }
+
     private val observer = Observer<Resource<List<Content>>> {
         if (it != null) {
             when (it) {
@@ -127,10 +132,6 @@ class TvShowsFragment : Fragment(), Callback {
                 is Resource.Error -> setDataState(DataState.ERROR)
             }
         }
-    }
-
-    private fun setList(sort: String) {
-        viewModel.getTvShows(sort).observe(viewLifecycleOwner,observer)
     }
 
     private fun setSearchList() {

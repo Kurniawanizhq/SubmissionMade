@@ -16,11 +16,10 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class ContentViewModel @Inject constructor(private val contentUseCase : ContentUseCase): ViewModel() {
-    fun getMovies(sort: String): LiveData<Resource<List<Content>>> =
-        contentUseCase.getAllMovies(sort).asLiveData()
 
-    fun getTvShows(sort: String): LiveData<Resource<List<Content>>> =
-        contentUseCase.getAllTvShows(sort).asLiveData()
+    fun getMovies(sort: String): LiveData<Resource<List<Content>>> = contentUseCase.getAllMovies(sort).asLiveData()
+
+    fun getTvShows(sort: String): LiveData<Resource<List<Content>>> = contentUseCase.getAllTvShows(sort).asLiveData()
 
     val queryChannel = MutableStateFlow("")
 

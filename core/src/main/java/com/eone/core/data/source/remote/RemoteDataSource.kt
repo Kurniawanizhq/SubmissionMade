@@ -21,7 +21,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val response = apiService.getMovies(BuildConfig.API_KEY)
                 val movieList = response.results
                 if (movieList.isNotEmpty()) {
-                    emit(ApiResponse.Success(response.results))
+                    emit(ApiResponse.Success(movieList))
                 } else {
                     emit(ApiResponse.Empty)
                 }
@@ -37,7 +37,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val response = apiService.getTvShows(BuildConfig.API_KEY)
                 val tvShowList = response.results
                 if (tvShowList.isNotEmpty()) {
-                    emit(ApiResponse.Success(response.results))
+                    emit(ApiResponse.Success(tvShowList))
                 } else {
                     emit(ApiResponse.Empty)
                 }

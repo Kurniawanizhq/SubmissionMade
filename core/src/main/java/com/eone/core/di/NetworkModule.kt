@@ -21,7 +21,7 @@ class NetworkModule {
         val hostName = "api.themoviedb.org"
         val mySuperSecretKey = BuildConfig.HASH_PIN
         val certificatePinner = CertificatePinner.Builder()
-            .add(hostName,mySuperSecretKey )
+            .add(hostName,mySuperSecretKey)
             .build()
 
         return OkHttpClient.Builder()

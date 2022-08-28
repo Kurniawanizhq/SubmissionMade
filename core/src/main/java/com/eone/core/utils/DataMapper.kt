@@ -42,7 +42,7 @@ object DataMapper {
                 it.voteCount ?: 0,
                 it.posterPath ?: "",
                 favorite = false,
-                isTvShows = false
+                isTvShows = true
             )
             movieList.add(movie)
         }

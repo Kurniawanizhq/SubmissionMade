@@ -117,6 +117,10 @@ class MoviesFragment : Fragment(), Callback {
         }
     }
 
+    private fun setList(sort: String) {
+        viewModel.getMovies(sort).observe(viewLifecycleOwner, observer)
+    }
+
     private val observer = Observer<Resource<List<Content>>> {
         if (it != null) {
             when (it) {
@@ -130,9 +134,7 @@ class MoviesFragment : Fragment(), Callback {
         }
     }
 
-    private fun setList(sort: String) {
-        viewModel.getMovies(sort).observe(viewLifecycleOwner, observer)
-    }
+
 
     private fun setSearchList() {
         viewModel.movieResult.observe(viewLifecycleOwner) { movies ->
