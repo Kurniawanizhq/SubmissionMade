@@ -16,6 +16,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class ContentViewModel @Inject constructor(private val contentUseCase : ContentUseCase): ViewModel() {
+    private val timeoutMilis = 300L
 
     fun getMovies(sort: String): LiveData<Resource<List<Content>>> = contentUseCase.getAllMovies(sort).asLiveData()
 
@@ -24,7 +25,7 @@ class ContentViewModel @Inject constructor(private val contentUseCase : ContentU
     val queryChannel = MutableStateFlow("")
 
     var movieResult = queryChannel
-        .debounce(300)
+        .debounce(timeoutMilis)
         .distinctUntilChanged()
         .filter {
             it.trim().isNotEmpty()
@@ -34,7 +35,7 @@ class ContentViewModel @Inject constructor(private val contentUseCase : ContentU
         }.asLiveData()
 
     val tvShowResult = queryChannel
-        .debounce(300)
+        .debounce(timeoutMilis)
         .distinctUntilChanged()
         .filter {
             it.trim().isNotEmpty()

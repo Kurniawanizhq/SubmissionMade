@@ -36,7 +36,7 @@ class MoviesFragment : Fragment(), Callback {
     private val viewModel: ContentViewModel by viewModels()
     private var sort = SortUtils.RANDOM
     private lateinit var contentAdapter: ContentAdapter
-    private lateinit var searchView: MaterialSearchView
+    private var searchView: MaterialSearchView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,33 +46,22 @@ class MoviesFragment : Fragment(), Callback {
         val toolbar: Toolbar = activity?.findViewById<View>(R.id.toolbar) as Toolbar
         (activity as AppCompatActivity?)?.setSupportActionBar(toolbar)
         searchView = (activity as MainActivity).findViewById(R.id.search_view)
+
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (activity != null) {
-            requireActivity().addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.search_menu, menu)
-                    searchView.setMenuItem(menu.findItem(R.id.action_search))
-                }
 
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return false
-                }
+        setupView()
+        observeSearch()
+        setList(sort)
+        setSearchList()
 
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-            setupView()
-            setList(sort)
-            setSearchList()
-            observeSearch()
-        }
     }
 
     private fun observeSearch() {
-        searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -86,6 +75,18 @@ class MoviesFragment : Fragment(), Callback {
 
     private fun setupView() {
         binding.apply {
+            requireActivity().addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.search_menu, menu)
+                    searchView?.setMenuItem(menu.findItem(R.id.action_search))
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return false
+                }
+
+            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
             contentAdapter = ContentAdapter(this@MoviesFragment)
 
             with(rvMovie) {
@@ -135,7 +136,6 @@ class MoviesFragment : Fragment(), Callback {
     }
 
 
-
     private fun setSearchList() {
         viewModel.movieResult.observe(viewLifecycleOwner) { movies ->
             if (movies.isNullOrEmpty()) {
@@ -146,7 +146,7 @@ class MoviesFragment : Fragment(), Callback {
             contentAdapter.setContent(movies)
         }
 
-        searchView.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
+        searchView?.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
             override fun onSearchViewShown() {
                 setDataState(DataState.SUCCESS)
             }
@@ -183,8 +183,7 @@ class MoviesFragment : Fragment(), Callback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchView.setOnQueryTextListener(null)
-        searchView.setOnSearchViewListener(null)
+        searchView = null
         binding.rvMovie.adapter = null
         _fragmentMoviesBinding = null
     }

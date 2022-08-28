@@ -30,6 +30,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     companion object{
-        const val splashScreenTime = 2000L
+      private const val splashScreenTime = 2000L
     }
 }

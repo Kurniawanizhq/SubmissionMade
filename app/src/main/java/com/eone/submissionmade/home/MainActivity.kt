@@ -1,6 +1,7 @@
 package com.eone.submissionmade.home
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import com.eone.submissionmade.R
 import com.eone.submissionmade.databinding.ActivityMainBinding
 import com.eone.submissionmade.movies.MoviesFragment
 import com.eone.submissionmade.tvshows.TvShowsFragment
+import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupView() {
         binding.apply {
-            bottomNav.setOnNavigationItemSelectedListener {
+            bottomNav.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.nav_movies -> navigationChange(MoviesFragment())
                     R.id.nav_tvshows -> navigationChange(TvShowsFragment())

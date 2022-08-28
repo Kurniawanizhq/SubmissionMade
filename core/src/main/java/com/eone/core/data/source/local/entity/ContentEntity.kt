@@ -9,33 +9,33 @@ import androidx.room.PrimaryKey
 data class ContentEntity(
 
     @ColumnInfo(name = "overview")
-    var overview: String,
+    val overview: String,
 
     @ColumnInfo(name = "originalLanguage")
-    var originalLanguage: String,
+    val originalLanguage: String,
 
     @ColumnInfo(name = "releaseDate")
-    var releaseDate: String,
+    val releaseDate: String,
 
     @ColumnInfo(name = "popularity")
-    var popularity: Double,
+    val popularity: Double,
 
     @ColumnInfo(name = "voteAverage")
-    var voteAverage: Double,
+    val voteAverage: Double,
 
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
-    var id: Int,
+    val id: Int,
 
     @ColumnInfo(name = "title")
-    var title: String,
+    val title: String,
 
     @ColumnInfo(name = "voteCount")
-    var voteCount: Int,
+    val voteCount: Int,
 
     @ColumnInfo(name = "posterPath")
-    var posterPath: String,
+    val posterPath: String,
 
     @ColumnInfo(name = "favorite")
     var favorite: Boolean = false,

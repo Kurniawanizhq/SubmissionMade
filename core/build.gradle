@@ -20,7 +20,7 @@ android {
         buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/discover/\""
         buildConfigField "String", "API_KEY", "\"fbb45a102406f8d6677deb32e36807fc\""
         buildConfigField "String", "HASH_PIN", "\"sha256/JSMzqOOrtyOT1kmau6zKhgT676hGgczD5VMdRMyJZFA=\""
-
+        buildConfigField "String", "HOST_NAME", "\"api.themoviedb.org\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

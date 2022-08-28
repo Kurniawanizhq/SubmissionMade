@@ -1,6 +1,7 @@
 package com.eone.core.di
 
 import com.eone.core.BuildConfig
+import com.eone.core.BuildConfig.DEBUG
 import com.eone.core.data.source.remote.network.ApiService
 import dagger.Module
 import dagger.Provides
@@ -18,15 +19,20 @@ import java.util.concurrent.TimeUnit
 class NetworkModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        val hostName = "api.themoviedb.org"
+        val loggingInterceptor = if (DEBUG) {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        } else {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
+
         val mySuperSecretKey = BuildConfig.HASH_PIN
         val certificatePinner = CertificatePinner.Builder()
-            .add(hostName,mySuperSecretKey)
+            .add(BuildConfig.HOST_NAME,mySuperSecretKey)
             .build()
 
         return OkHttpClient.Builder()
             .certificatePinner(certificatePinner)
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(loggingInterceptor)
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .build()

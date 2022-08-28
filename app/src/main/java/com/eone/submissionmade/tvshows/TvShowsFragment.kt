@@ -36,7 +36,7 @@ class TvShowsFragment : Fragment(), Callback {
     private val binding get() = requireNotNull(_binding)
     private val viewModel: ContentViewModel by viewModels()
     private lateinit var contentAdapter: ContentAdapter
-    private lateinit var searchView: MaterialSearchView
+    private var searchView: MaterialSearchView? = null
     private var sort = SortUtils.RANDOM
 
     override fun onCreateView(
@@ -51,28 +51,14 @@ class TvShowsFragment : Fragment(), Callback {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (activity != null) {
-            requireActivity().addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.search_menu, menu)
-                    searchView.setMenuItem(menu.findItem(R.id.action_search))
-                }
-
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return false
-                }
-
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-            setupView()
-            setList(sort)
-            setSearchList()
-            observeSearch()
-        }
+        setupView()
+        observeSearch()
+        setList(sort)
+        setSearchList()
     }
 
     private fun observeSearch() {
-        searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -86,6 +72,18 @@ class TvShowsFragment : Fragment(), Callback {
 
     private fun setupView() {
         binding.apply {
+            requireActivity().addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.search_menu, menu)
+                    searchView?.setMenuItem(menu.findItem(R.id.action_search))
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return false
+                }
+
+            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
             contentAdapter = ContentAdapter(this@TvShowsFragment)
 
             with(rvTvshow) {
@@ -118,7 +116,7 @@ class TvShowsFragment : Fragment(), Callback {
     }
 
     private fun setList(sort: String) {
-        viewModel.getTvShows(sort).observe(viewLifecycleOwner,observer)
+        viewModel.getTvShows(sort).observe(viewLifecycleOwner, observer)
     }
 
     private val observer = Observer<Resource<List<Content>>> {
@@ -144,7 +142,7 @@ class TvShowsFragment : Fragment(), Callback {
             contentAdapter.setContent(tvShows)
         }
 
-        searchView.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
+        searchView?.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
             override fun onSearchViewShown() {
                 setDataState(DataState.SUCCESS)
             }
@@ -180,8 +178,7 @@ class TvShowsFragment : Fragment(), Callback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchView.setOnQueryTextListener(null)
-        searchView.setOnSearchViewListener(null)
+        searchView = null
         binding.rvTvshow.adapter = null
         _binding = null
     }
